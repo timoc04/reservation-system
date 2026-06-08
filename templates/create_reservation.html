@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Reservation</title>
+</head>
+<body>
+    <h1>Create Reservation</h1>
+
+    <p>Signed in as {{ user.name }} ({{ user.email }})</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li><strong>{{ category }}:</strong> {{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('main.create_reservation') }}">
+        <label for="guest_name">Guest name</label><br>
+        <input type="text" id="guest_name" name="guest_name" required><br><br>
+
+        <label for="accommodation">Accommodation</label><br>
+        <input type="text" id="accommodation" name="accommodation" required><br><br>
+
+        <label for="start_date">Start date</label><br>
+        <input type="date" id="start_date" name="start_date" required><br><br>
+
+        <label for="end_date">End date</label><br>
+        <input type="date" id="end_date" name="end_date" required><br><br>
+
+        <button type="submit">Create reservation</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('main.dashboard') }}">Back to dashboard</a>
+</body>
+</html>

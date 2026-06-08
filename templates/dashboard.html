@@ -12,6 +12,16 @@
 
     <p>This page is protected and can only be accessed after authentication through Microsoft Entra ID.</p>
 
+    <h2>Reservation options</h2>
+    <ul>
+        <li><a href="{{ url_for('main.create_reservation') }}">Create reservation</a></li>
+        <li><a href="{{ url_for('main.view_reservations') }}">View reservations</a></li>
+        <li><a href="{{ url_for('main.admin_reservations') }}">Admin reservation overview</a></li>
+    </ul>
+
+    <h2>Current reservation count</h2>
+    <p>{{ reservations|length }} reservation(s) currently stored in the application.</p>
+
     <a href="{{ url_for('main.index') }}">Back to homepage</a>
     <br>
     <a href="{{ url_for('auth.logout') }}">Sign out</a>

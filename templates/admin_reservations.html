@@ -2,22 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reservations</title>
+    <title>Admin Reservation Overview</title>
 </head>
 <body>
-    <h1>Reservations</h1>
+    <h1>Admin Reservation Overview</h1>
 
     <p>Signed in as {{ user.name }} ({{ user.email }})</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul>
-                {% for category, message in messages %}
-                    <li><strong>{{ category }}:</strong> {{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    <p>
+        This page represents the administrative reservation overview.
+        Role-based restrictions will be implemented in paragraph 3.6.
+    </p>
 
     {% if reservations %}
         <table border="1" cellpadding="8">
@@ -52,8 +47,6 @@
         <p>No reservations have been created yet.</p>
     {% endif %}
 
-    <br>
-    <a href="{{ url_for('main.create_reservation') }}">Create new reservation</a>
     <br>
     <a href="{{ url_for('main.dashboard') }}">Back to dashboard</a>
 </body>
