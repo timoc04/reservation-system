@@ -1,6 +1,7 @@
 from flask import Flask
 
 from .config import Config
+from .database import initialise_database
 
 
 def create_app():
@@ -11,6 +12,9 @@ def create_app():
     )
 
     app.config.from_object(Config)
+
+    with app.app_context():
+        initialise_database()
 
     from .routes import main
     from .auth_routes import auth

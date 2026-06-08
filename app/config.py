@@ -14,5 +14,10 @@ class Config:
     ENTRA_AUTHORITY = f"https://login.microsoftonline.com/{ENTRA_TENANT_ID}"
     ENTRA_SCOPE = ["User.Read"]
 
+    DB_SERVER = os.getenv("DB_SERVER")
+    DB_NAME = os.getenv("DB_NAME")
+    DB_USERNAME = os.getenv("DB_USERNAME")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"

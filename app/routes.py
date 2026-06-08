@@ -1,14 +1,10 @@
-from datetime import datetime
-
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 
 from .auth import login_required
+from .database import create_reservation as db_create_reservation
+from .database import get_all_reservations
 
 main = Blueprint("main", __name__)
-
-# Temporary in-memory reservation storage.
-# This will later be replaced by Azure SQL Database integration in paragraph 3.5.
-reservations = []
 
 
 @main.route("/")
@@ -22,6 +18,8 @@ def index():
 @main.route("/dashboard")
 @login_required
 def dashboard():
+    reservations = get_all_reservations()
+
     return render_template(
         "dashboard.html",
         user=session.get("user"),
@@ -32,6 +30,8 @@ def dashboard():
 @main.route("/reservations")
 @login_required
 def view_reservations():
+    reservations = get_all_reservations()
+
     return render_template(
         "reservations.html",
         user=session.get("user"),
@@ -58,18 +58,13 @@ def create_reservation():
 
         user = session.get("user")
 
-        reservation = {
-            "id": len(reservations) + 1,
-            "guest_name": guest_name,
-            "accommodation": accommodation,
-            "start_date": start_date,
-            "end_date": end_date,
-            "created_by": user.get("email"),
-            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "status": "Created"
-        }
-
-        reservations.append(reservation)
+        db_create_reservation(
+            guest_name=guest_name,
+            accommodation=accommodation,
+            start_date=start_date,
+            end_date=end_date,
+            created_by=user.get("email")
+        )
 
         flash("Reservation created successfully.", "success")
         return redirect(url_for("main.view_reservations"))
@@ -83,6 +78,8 @@ def create_reservation():
 @main.route("/admin/reservations")
 @login_required
 def admin_reservations():
+    reservations = get_all_reservations()
+
     return render_template(
         "admin_reservations.html",
         user=session.get("user"),
