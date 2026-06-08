@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Dashboard</title>
+</head>
+<body>
+    <h1>Reservation Dashboard</h1>
+
+    <p>Welcome, {{ user.name }}.</p>
+    <p>Email: {{ user.email }}</p>
+
+    <p>This page is protected and can only be accessed after authentication through Microsoft Entra ID.</p>
+
+    <a href="{{ url_for('main.index') }}">Back to homepage</a>
+    <br>
+    <a href="{{ url_for('auth.logout') }}">Sign out</a>
+</body>
+</html>

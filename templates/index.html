@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Fonteyn Reservation System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <main class="container">
-        <h1>Fonteyn Reservation System</h1>
-        <p>The Flask reservation application is running successfully.</p>
-    </main>
+    <h1>Fonteyn Reservation System</h1>
+
+    {% if user %}
+        <p>You are signed in as {{ user.name }}.</p>
+        <a href="{{ url_for('main.dashboard') }}">Open dashboard</a>
+        <br>
+        <a href="{{ url_for('auth.logout') }}">Sign out</a>
+    {% else %}
+        <p>Please sign in to access the reservation system.</p>
+        <a href="{{ url_for('auth.login') }}">Sign in with Microsoft Entra ID</a>
+    {% endif %}
 </body>
 </html>
