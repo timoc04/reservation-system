@@ -1,7 +1,7 @@
 from functools import wraps
 
 import msal
-from flask import redirect, request, session, url_for
+from flask import redirect, request, session, url_for, abort
 
 from .config import Config
 
@@ -27,6 +27,21 @@ def login_required(route_function):
         if "user" not in session:
             session["next_url"] = request.url
             return redirect(url_for("auth.login"))
+
+        return route_function(*args, **kwargs)
+
+    return wrapper
+
+
+def admin_required(route_function):
+    @wraps(route_function)
+    def wrapper(*args, **kwargs):
+        if "user" not in session:
+            session["next_url"] = request.url
+            return redirect(url_for("auth.login"))
+
+        if not session["user"].get("is_admin"):
+            abort(403)
 
         return route_function(*args, **kwargs)
 

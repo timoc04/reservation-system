@@ -16,7 +16,14 @@
     <ul>
         <li><a href="{{ url_for('main.create_reservation') }}">Create reservation</a></li>
         <li><a href="{{ url_for('main.view_reservations') }}">View reservations</a></li>
-        <li><a href="{{ url_for('main.admin_reservations') }}">Admin reservation overview</a></li>
+        {% if user.is_admin %}
+            <li><a href="{{ url_for('main.admin_reservations') }}">Admin reservation overview</a></li>
+        {% endif %}
+        {% if user.is_admin %}
+            <p>Role: Administrator</p>
+        {% else %}
+            <p>Role: Employee</p>
+        {% endif %}
     </ul>
 
     <h2>Current reservation count</h2>

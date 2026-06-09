@@ -28,10 +28,13 @@ def auth_callback():
 
     claims = result["id_token_claims"]
 
+    user_email = claims.get("preferred_username", "").lower()
+
     session["user"] = {
         "name": claims.get("name"),
-        "email": claims.get("preferred_username"),
-        "object_id": claims.get("oid")
+        "email": user_email,
+        "object_id": claims.get("oid"),
+        "is_admin": user_email in Config.ADMIN_EMAILS
     }
 
     next_url = session.pop("next_url", url_for("main.dashboard"))

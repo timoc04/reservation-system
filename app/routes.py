@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 
-from .auth import login_required
+from .auth import login_required, admin_required
 from .database import create_reservation as db_create_reservation
 from .database import get_all_reservations
 
@@ -76,7 +76,7 @@ def create_reservation():
 
 
 @main.route("/admin/reservations")
-@login_required
+@admin_required
 def admin_reservations():
     reservations = get_all_reservations()
 
