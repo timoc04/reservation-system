@@ -19,7 +19,7 @@ def auth_callback():
     result = build_msal_app().acquire_token_by_authorization_code(
         code=request.args["code"],
         scopes=Config.ENTRA_SCOPE,
-        redirect_uri=url_for("auth.auth_callback", _external=True)
+        redirect_uri=Config.REDIRECT_URI
     )
 
     if "id_token_claims" not in result:
