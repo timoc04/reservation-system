@@ -17,7 +17,7 @@ def build_msal_app():
 def build_auth_url():
     return build_msal_app().get_authorization_request_url(
         scopes=Config.ENTRA_SCOPE,
-        redirect_uri=url_for("auth.auth_callback", _external=True)
+        redirect_uri=Config.REDIRECT_URI
     )
 
 

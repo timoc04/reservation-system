@@ -10,6 +10,7 @@ class Config:
     ENTRA_CLIENT_ID = os.getenv("ENTRA_CLIENT_ID")
     ENTRA_CLIENT_SECRET = os.getenv("ENTRA_CLIENT_SECRET")
     ENTRA_TENANT_ID = os.getenv("ENTRA_TENANT_ID")
+    REDIRECT_URI = os.getenv("REDIRECT_URI")
 
     ENTRA_AUTHORITY = f"https://login.microsoftonline.com/{ENTRA_TENANT_ID}"
     ENTRA_SCOPE = ["User.Read"]
