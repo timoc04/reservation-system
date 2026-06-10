@@ -7,12 +7,17 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: reservation-system
-  PYTHON_VERSION: '3.11'
+  AZURE_WEBAPP_NAME: fonteyn-reservation-app
+  AZURE_RESOURCE_GROUP: rg-application-platform
+  PYTHON_VERSION: '3.12'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -32,9 +37,74 @@ jobs:
         run: |
           zip -r release.zip . -x "*.git*" "__pycache__/*" ".env" "venv/*"
 
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Configure Azure App Service application settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          resource-group-name: ${{ env.AZURE_RESOURCE_GROUP }}
+          app-settings-json: |
+            [
+              {
+                "name": "FLASK_SECRET_KEY",
+                "value": "${{ secrets.FLASK_SECRET_KEY }}",
+                "slotSetting": false
+              },
+              {
+                "name": "ENTRA_CLIENT_ID",
+                "value": "${{ secrets.ENTRA_CLIENT_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "ENTRA_CLIENT_SECRET",
+                "value": "${{ secrets.ENTRA_CLIENT_SECRET }}",
+                "slotSetting": false
+              },
+              {
+                "name": "ENTRA_TENANT_ID",
+                "value": "${{ secrets.ENTRA_TENANT_ID }}",
+                "slotSetting": false
+              },
+              {
+                "name": "REDIRECT_URI",
+                "value": "${{ secrets.REDIRECT_URI }}",
+                "slotSetting": false
+              },
+              {
+                "name": "DB_SERVER",
+                "value": "${{ secrets.DB_SERVER }}",
+                "slotSetting": false
+              },
+              {
+                "name": "DB_NAME",
+                "value": "${{ secrets.DB_NAME }}",
+                "slotSetting": false
+              },
+              {
+                "name": "DB_USERNAME",
+                "value": "${{ secrets.DB_USERNAME }}",
+                "slotSetting": false
+              },
+              {
+                "name": "DB_PASSWORD",
+                "value": "${{ secrets.DB_PASSWORD }}",
+                "slotSetting": false
+              },
+              {
+                "name": "ADMIN_EMAILS",
+                "value": "${{ secrets.ADMIN_EMAILS }}",
+                "slotSetting": false
+              }
+            ]
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: release.zip
